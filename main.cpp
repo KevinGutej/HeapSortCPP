@@ -1,50 +1,63 @@
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
-void heapify(int arr[], int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+template <typename T>
+void heapify(vector<T>& arr, int n, int i, bool ascending) {
+    while (true) {
+        int extreme = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
 
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
+        if (left < n && ((ascending && arr[left] > arr[extreme]) || (!ascending && arr[left] < arr[extreme])))
+            extreme = left;
 
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
+        if (right < n && ((ascending && arr[right] > arr[extreme]) || (!ascending && arr[right] < arr[extreme])))
+            extreme = right;
 
-    if (largest != i) {
-        swap(arr[i], arr[largest]);
-        heapify(arr, n, largest);
+        if (extreme != i) {
+            swap(arr[i], arr[extreme]);
+            i = extreme;
+        } else {
+            break;
+        }
     }
 }
 
-void heapSort(int arr[], int n) {
+template <typename T>
+void heapSort(vector<T>& arr, bool ascending = true) {
+    int n = arr.size();
+
     for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
+        heapify(arr, n, i, ascending);
 
     for (int i = n - 1; i > 0; i--) {
         swap(arr[0], arr[i]);
-        heapify(arr, i, 0);
+        heapify(arr, i, 0, ascending);
     }
 }
 
-void printArray(int arr[], int n) {
-    for (int i = 0; i < n; i++)
-        cout << arr[i] << " ";
+template <typename T>
+void printArray(const vector<T>& arr) {
+    for (const auto& elem : arr)
+        cout << elem << " ";
     cout << endl;
 }
 
 int main() {
-    int arr[] = {12, 11, 13, 5, 6, 7};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    vector<int> arr = {12, 11, 13, 5, 6, 7};
 
     cout << "Original array: ";
-    printArray(arr, n);
+    printArray(arr);
 
-    heapSort(arr, n);
+    heapSort(arr, true);
+    cout << "Sorted array (Ascending Order): ";
+    printArray(arr);
 
-    cout << "Sorted array: ";
-    printArray(arr, n);
+    heapSort(arr, false);
+    cout << "Sorted array (Descending Order): ";
+    printArray(arr);
 
     return 0;
 }
