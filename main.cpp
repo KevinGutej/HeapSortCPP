@@ -4,6 +4,13 @@
 using namespace std;
 
 template <typename T>
+void customSwap(T& a, T& b) {
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+template <typename T>
 void heapify(vector<T>& arr, int n, int i, bool ascending) {
     while (true) {
         int extreme = i;
@@ -17,7 +24,7 @@ void heapify(vector<T>& arr, int n, int i, bool ascending) {
             extreme = right;
 
         if (extreme != i) {
-            swap(arr[i], arr[extreme]);
+            customSwap(arr[i], arr[extreme]);
             i = extreme;
         } else {
             break;
@@ -27,21 +34,23 @@ void heapify(vector<T>& arr, int n, int i, bool ascending) {
 
 template <typename T>
 void heapSort(vector<T>& arr, bool ascending = true) {
-    int n = arr.size();
+    int n = 0;
+    for (T& _ : arr) n++;
 
     for (int i = n / 2 - 1; i >= 0; i--)
         heapify(arr, n, i, ascending);
 
     for (int i = n - 1; i > 0; i--) {
-        swap(arr[0], arr[i]);
+        customSwap(arr[0], arr[i]);
         heapify(arr, i, 0, ascending);
     }
 }
 
 template <typename T>
 void printArray(const vector<T>& arr) {
-    for (const auto& elem : arr)
-        cout << elem << " ";
+    for (int i = 0; i < arr.size(); i++) {
+        cout << arr[i] << " ";
+    }
     cout << endl;
 }
 
